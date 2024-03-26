@@ -2,8 +2,8 @@
 include_once 'database/Database.php';
 include_once 'model/Employee.php';
 
-$database = new OneHRMS\database\Database();
-$db = $database->connect();
+// $database = new OneHRMS\database\Database();
+$db = OneHRMS\database\Database::connect();
 $employee = new OneHRMS\model\Employee($db);
 
 $errors = [];
@@ -147,7 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     <?php
-    $db->close();
+    oneHRMS\database\Database::close();
     include_once('../php-mysql/partials/footer.php');
     ?>
 </body>

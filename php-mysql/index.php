@@ -1,3 +1,6 @@
+<?php
+error_reporting(E_ERROR | E_PARSE);
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +22,7 @@
                 <div class="col mt-3">
                     <h2 class="mb-3">Headline</h2>
                     <hr />
-                    <a href="model/add-employee.php" class="btn btn-secondary btn-sm float-end mb-3">Add Employee</a>
+                    <a href="add-employee.php" class="btn btn-secondary btn-sm float-end mb-3">Add Employee</a>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -37,25 +40,25 @@
                             require_once('database/Database.php');
                             require_once('model/Employee.php');
 
-                            $database = new OneHRMS\database\Database();
-                            $db = $database->connect();
+                            // $database = new OneHRMS\database\Database();
+                            $db = OneHRMS\database\Database::connect();
 
                             $employee = new OneHRMS\model\Employee($db);
                             $result = ($employee->listAll());
                             if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
+                                while ($row = $result->fetch_object()) {
                                     echo "<tr>";
-                                    echo "<td>" . $row['id'] . "</td>";
-                                    echo "<td>" . $row['first_name'] . "</td>";
-                                    echo "<td>" . $row['last_name'] . "</td>";
-                                    echo "<td>" . $row['email'] . "</td>";
-                                    echo "<td>" . $row['salary'] . "</td>";
-                                    echo "<td>" . $row['department'] . "</td>";
+                                    echo "<td>" . $row->id . "</td>";
+                                    echo "<td>" . $row->first_name . "</td>";
+                                    echo "<td>" . $row->last_name . "</td>";
+                                    echo "<td>" . $row->email . "</td>";
+                                    echo "<td>" . $row->salary . "</td>";
+                                    echo "<td>" . $row->department . "</td>";
                                     echo "<td class='text-end'>
-                                    <a href='add-employee.php?id=" . $row['id'] . "'class='btn btn-warning btn-sm'>
+                                    <a href='add-employee.php?id=" . $row->id . "'class='btn btn-warning btn-sm'>
                                     Edit
                                     </a>
-                                    <a href='delete-employee.php?id=" . $row['id'] .  " 'class='btn btn-danger btn-sm' onclick= 'return confirmDelete()'>Delete</a>
+                                    <a href='delete-employee.php?id=" . $row->id .  " 'class='btn btn-danger btn-sm' onclick= 'return confirmDelete()'>Delete</a>
                                      
                                      </td>";
                                     echo "</tr>";
@@ -65,7 +68,7 @@
                                 <td colspan='7' class='text-center'>No records found!</td>
                                 </tr>";
                             }
-                            $db->close();
+                            oneHRMS\database\Database::close();
                             ?>
                         </tbody>
                     </table>

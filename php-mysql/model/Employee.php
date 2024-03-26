@@ -28,12 +28,7 @@ class Employee extends BaseModel implements CrudInterface
         $query = "INSERT INTO " . $this->table . " (first_name, last_name, email, salary, department)
         VALUES (?, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($query);
-        $this->first_name = htmlspecialchars(strip_tags($this->first_name));
-        $this->last_name = htmlspecialchars(strip_tags($this->last_name));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->salary = htmlspecialchars(strip_tags($this->salary));
-        $this->department = htmlspecialchars(strip_tags($this->department));
-
+        $this->sanitize();
         $stmt->bind_param("sssis", $this->first_name, $this->last_name, $this->email, $this->salary, $this->department);
 
         if ($stmt->execute()) {
@@ -59,12 +54,7 @@ class Employee extends BaseModel implements CrudInterface
     {
         $query = "UPDATE " . $this->table . " SET first_name = ?, last_name = ?, email = ?, salary = ?, department = ? WHERE id = ?";
         $stmt = $this->conn->prepare($query);
-        $this->first_name = htmlspecialchars(strip_tags($this->first_name));
-        $this->last_name = htmlspecialchars(strip_tags($this->last_name));
-        $this->email = htmlspecialchars(strip_tags($this->email));
-        $this->salary = htmlspecialchars(strip_tags($this->salary));
-        $this->department = htmlspecialchars(strip_tags($this->department));
-
+        $this->sanitize();
         $stmt->bind_param("sssisi", $this->first_name, $this->last_name, $this->email, $this->salary, $this->department, $id);
         if ($stmt->execute()) {
             return true;
@@ -92,5 +82,13 @@ class Employee extends BaseModel implements CrudInterface
         $this->validateEmail('email', $data['email'], $errors);
 
         return $errors;
+    }
+    private function sanitize()
+    {
+        $this->first_name = htmlspecialchars(strip_tags($this->first_name));
+        $this->last_name = htmlspecialchars(strip_tags($this->last_name));
+        $this->email = htmlspecialchars(strip_tags($this->email));
+        $this->salary = htmlspecialchars(strip_tags($this->salary));
+        $this->department = htmlspecialchars(strip_tags($this->department));
     }
 }
